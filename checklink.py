@@ -18,15 +18,15 @@ brandname = args.brandname
 print "Analyzing '%s'" % targetURL
 checker = PageChecker(canonicalURL, brandname)
 checker.checkURL(targetURL)
-backlinks = checker.getBacklinks()
 mentions = checker.getMentions()
+backlinks = checker.getBacklinks()
 
-print "\nSearching for backlinks to %s..." % canonicalURL
+print "\nSearching for mentions of \"%s\"..." % brandname
+print "Found %s" % len(mentions)
+for mention in mentions:
+  print "-- %s" % mention.getSnippet()
+
+print "\nSearching for backlinks to \"%s\"..." % canonicalURL
 print "Found %s" % len(backlinks)
 for link in backlinks:
   print "-- %s" % link.getHTML()
-
-print "\nSearching for mentions of %s..." % brandname
-print "Found %s" % len(mentions)
-
-

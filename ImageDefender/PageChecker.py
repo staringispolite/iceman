@@ -5,6 +5,7 @@ from ImageDefender import Backlink
 # Adapted from http://docs.python-guide.org/en/latest/scenarios/scrape/
 from lxml import html
 from lxml.etree import tostring
+import re
 import requests
 from urlparse import urlparse
 
@@ -52,11 +53,18 @@ class PageChecker:
         backlink = Backlink(url, isDomain, isCanonical, elementHTML)
         # Store in class's object for later
         self.backlinks.append(backlink)
-    # Process mentions
-      # Find tect matches for mentions of self.brandname
+    # Find text matches for mentions of self.brandname
+    # TODO: have this loop through all elements in the page, so it's
+    # only processing the innerHTML of elements, and we know if it's linked.
+    mentions = [m.start() for m in re.finditer(self.brandname, page.content)]
+    for startIndex in mentions:
       # Create a Mention object
-      # Store in class's object for later
-    pass
+      snippetPadding = 10  # How many chars on each side to show
+      snippetStart = max(0, startIndex - snippetPadding)
+      snippetEnd = min(len(page.content), startIndex + len(self.brandname) + snippetPadding)
+      snippet = page.content[snippetStart:snippetEnd]
+      mention = Mention(url, False, snippet)
+      self.mentions.append(mention)
 
   def getMentions(self):
     return self.mentions
