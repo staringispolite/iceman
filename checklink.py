@@ -21,10 +21,12 @@ checker.checkURL(targetURL)
 backlinks = checker.getBacklinks()
 mentions = checker.getMentions()
 
-print "Searching for backlinks to %s..." % canonicalURL
+print "\nSearching for backlinks to %s..." % canonicalURL
 print "Found %s" % len(backlinks)
+for link in backlinks:
+  print "-- %s" % link.getHTML()
 
-print "Searching for mentions of %s..." % brandname
+print "\nSearching for mentions of %s..." % brandname
 print "Found %s" % len(mentions)
 
 
