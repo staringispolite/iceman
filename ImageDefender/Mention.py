@@ -21,11 +21,11 @@ class Mention:
     if isLinked:
       self.isLinked = True
 
-  def getFromURL():
-    return fromURL
+  def getFromURL(self):
+    return self.fromURL
 
-  def isLinked():
-    return isLinked
+  def isLinked(self):
+    return self.isLinked
 
-  def getSnippet():
-    return snippet
+  def getSnippet(self):
+    return self.snippet
