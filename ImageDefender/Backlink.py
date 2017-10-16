@@ -13,7 +13,7 @@ class Backlink:
   # @string - the HTML of the anchor tag containing the backlink
   html = ""
 
-  def __init__(self, fromURL, isCorrectDomain, isCanonicalURL, snippet):
+  def __init__(self, fromURL, isCorrectDomain, isCanonicalURL, html):
     '''
     Initialize as read-only
     '''
@@ -23,18 +23,18 @@ class Backlink:
     # Not just setting directly from input, in case it's not boolean
     # Probably best to actually check and throw InputExceptions
     if isCorrectDomain:
-      isCorrectDomain = True
+      self.isCorrectDomain = True
     if isCanonicalURL:
-      isCanonicalURL = True
+      self.isCanonicalURL = True
 
-  def getFromURL():
-    return fromURL
+  def getFromURL(self):
+    return self.fromURL
 
-  def isCorrectDomain():
-    return isCorrectDomain
+  def isCorrectDomain(self):
+    return self.isCorrectDomain
 
-  def isCanonicalURL():
-    return isCanonicalURL
+  def isCanonicalURL(self):
+    return self.isCanonicalURL
 
-  def getHTML():
-    return html
+  def getHTML(self):
+    return self.html
