@@ -13,10 +13,11 @@ class Backlink:
   # @string - the HTML of the anchor tag containing the backlink
   html = ""
 
-  def __init__(self, fromURL, isLinked, snippet):
+  def __init__(self, fromURL, isCorrectDomain, isCanonicalURL, snippet):
     '''
     Initialize as read-only
     '''
+    # TODO: Add the URL of this link itself or just make it an ElementTree
     self.fromURL = fromURL
     self.html = html
     # Not just setting directly from input, in case it's not boolean
