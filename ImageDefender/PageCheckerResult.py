@@ -28,9 +28,9 @@ class PageCheckerResult:
         self.domainBacklinks.append(link)
     for mention in mentions:
       self.mentions.append(mention)
-    print "%d links total" % self.numBacklinks()
-    print "%d domain" % self.numDomainLinks()
-    print "%d canonical" % self.numCanonicalLinks()
+    #print "%d links total" % self.numBacklinks()
+    #print "%d domain" % self.numDomainLinks()
+    #print "%d canonical" % self.numCanonicalLinks()
 
   def getURL(self):
     return self.url
