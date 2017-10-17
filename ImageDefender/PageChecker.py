@@ -4,7 +4,6 @@ from ImageDefender import Backlink
 
 # Adapted from http://docs.python-guide.org/en/latest/scenarios/scrape/
 from lxml import html
-from lxml.etree import tostring
 import re
 import requests
 from urlparse import urlparse
@@ -47,10 +46,8 @@ class PageChecker:
       #print "--your domain: %s" % isDomain
       #print "--canonical: %s" % isCanonical
       if isDomain:
-        # TODO: Just store the ElementTree object?
-        elementHTML = tostring(element)
         # Create Backlink object
-        backlink = Backlink(url, isDomain, isCanonical, elementHTML)
+        backlink = Backlink(url, isDomain, isCanonical, element)
         # Store in class's object for later
         self.backlinks.append(backlink)
     # Find text matches for mentions of self.brandname
