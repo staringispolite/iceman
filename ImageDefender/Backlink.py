@@ -31,10 +31,10 @@ class Backlink:
   def getFromURL(self):
     return self.fromURL
 
-  def isCorrectDomain(self):
+  def isDomainLink(self):
     return self.isCorrectDomain
 
-  def isCanonicalURL(self):
+  def isCanonicalLink(self):
     return self.isCanonicalURL
 
   def getELement(self):

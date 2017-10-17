@@ -1,32 +1,43 @@
 #!/usr/bin/python
 import argparse
 from ImageDefender import PageChecker
+from ImageDefender import CSVTask
 
 parser = argparse.ArgumentParser(description='Check a URL for backlinks')
-parser.add_argument('--canonical-url', dest='canonicalurl',
-    help="The fully qualified URL of yours you expect to find a backlink for")
-parser.add_argument('--target-url', dest='targeturl',
-    help="The fully qualified URL to check for backlinks")
-parser.add_argument('--brandname', dest='brandname',
-    help="The word or phrase you expect in a mention of you/your org")
+parser.add_argument('--csv-task', dest='csvFilename',
+    help="The full path to a CSV PageChecker task")
+parser.add_argument('-v', dest='verbose', default=False,
+    action="store_true", help="Print details as it goes")
 args = parser.parse_args()
 
-canonicalURL = args.canonicalurl
-targetURL = args.targeturl
-brandname = args.brandname
+csvTask = CSVTask(args.csvFilename)
+canonicalURL = csvTask.getCanonicalURL()
+discoveredURLs = csvTask.getDiscoveredURLs()
+brandname = csvTask.getBrandNames()[0]  # For now, only do one brand mention search
 
-print "Analyzing '%s'" % targetURL
 checker = PageChecker(canonicalURL, brandname)
-checker.checkURL(targetURL)
-mentions = checker.getMentions()
-backlinks = checker.getBacklinks()
+result = None
+for targetURL in discoveredURLs:
+  if args.verbose:
+    print "Analyzing '%s'" % targetURL
 
-print "\nSearching for mentions of \"%s\"..." % brandname
-print "Found %s" % len(mentions)
-for mention in mentions:
-  print "[...]%s[...]" % mention.getSnippet()
+  result = checker.checkURL(targetURL)
+  if result.wasSuccessful():
+    mentions = result.getMentions()
+    backlinks = result.getBacklinks()
 
-print "\nSearching for backlinks to \"%s\"..." % canonicalURL
-print "Found %s" % len(backlinks)
-for link in backlinks:
-  print "-- %s" % link.getHTML()
+    if args.verbose:
+      print "\nSearching for mentions of \"%s\"..." % brandname
+      print "Found %s" % len(mentions)
+      for mention in mentions:
+        print "[...]%s[...]" % mention.getSnippet()
+      print "\nSearching for backlinks to \"%s\"..." % canonicalURL
+      print "Found %s" % len(backlinks)
+      for link in backlinks:
+        print "-- %s" % link.getHTML()
+      print "\n"
+  else:
+    print "URL FAILED"
+
+csvTask.writePageCheckerResultsToFile(checker, "output.csv")
+
