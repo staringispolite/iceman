@@ -4,6 +4,7 @@ from ImageDefender import Backlink
 from ImageDefender import PageCheckerResult
 
 # Adapted from http://docs.python-guide.org/en/latest/scenarios/scrape/
+import lxml
 from lxml import html
 import re
 import requests
@@ -73,7 +74,9 @@ class PageChecker:
             mention = Mention(url, isLinked, snippet)
             mentionsList.append(mention)
       successful = True
-    except requests.exceptions.SSLError as e:
+    except (requests.exceptions.SSLError,
+        requests.exceptions.ConnectionError,
+        lxml.etree.XMLSyntaxError) as e:
       print e
 
     result = PageCheckerResult(url, backlinksList, mentionsList, successful)
