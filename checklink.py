@@ -6,6 +6,8 @@ from ImageDefender import CSVTask
 parser = argparse.ArgumentParser(description='Check a URL for backlinks')
 parser.add_argument('--csv-task', dest='csvFilename',
     help="The full path to a CSV PageChecker task")
+parser.add_argument('-o', dest='outputFilename', default='output.csv',
+    help="The full path to write CSV output to")
 parser.add_argument('-v', dest='verbose', default=False,
     action="store_true", help="Print details as it goes")
 args = parser.parse_args()
@@ -39,5 +41,5 @@ for targetURL in discoveredURLs:
   else:
     print "URL FAILED"
 
-csvTask.writePageCheckerResultsToFile(checker, "output.csv")
+csvTask.writePageCheckerResultsToFile(checker, args.outputFilename)
 
