@@ -17,6 +17,8 @@ class PageChecker:
   backlinks = []
   # Array of Mention objects
   mentions = []
+  # HTML elements to ignore the contents of
+  blacklistTags = ['script']
 
   def __init__(self, canonicalBacklink, brandname):
     '''
@@ -51,18 +53,20 @@ class PageChecker:
         # Store in class's object for later
         self.backlinks.append(backlink)
     # Find text matches for mentions of self.brandname
-    # TODO: have this loop through all elements in the page, so it's
-    # only processing the innerHTML of elements, and we know if it's linked.
-    mentions = [m.start() for m in re.finditer(self.brandname, page.content)]
-    for startIndex in mentions:
-      # Create a Mention object
-      snippetPadding = 20  # How many chars on each side to show
-      snippetStart = max(0, startIndex - snippetPadding)
-      snippetEnd = min(len(page.content), startIndex + len(self.brandname) + snippetPadding)
-      snippet = page.content[snippetStart:snippetEnd]
-      snippet = snippet.replace('\n', '')
-      mention = Mention(url, False, snippet)
-      self.mentions.append(mention)
+    for element in tree.iter():
+      if element.tag not in self.blacklistTags:
+        isLinked = (element.tag == "a")
+        innerText = "%s" % element.text
+        mentions = [m.start() for m in re.finditer(self.brandname, innerText)]
+        for startIndex in mentions:
+          # Create a Mention object
+          snippetPadding = 20  # How many chars on each side to show
+          snippetStart = max(0, startIndex - snippetPadding)
+          snippetEnd = min(len(innerText), startIndex + len(self.brandname) + snippetPadding)
+          snippet = innerText[snippetStart:snippetEnd]
+          snippet = snippet.replace('\n', '')
+          mention = Mention(url, isLinked, snippet)
+          self.mentions.append(mention)
 
   def getMentions(self):
     return self.mentions
