@@ -56,10 +56,11 @@ class PageChecker:
     mentions = [m.start() for m in re.finditer(self.brandname, page.content)]
     for startIndex in mentions:
       # Create a Mention object
-      snippetPadding = 10  # How many chars on each side to show
+      snippetPadding = 20  # How many chars on each side to show
       snippetStart = max(0, startIndex - snippetPadding)
       snippetEnd = min(len(page.content), startIndex + len(self.brandname) + snippetPadding)
       snippet = page.content[snippetStart:snippetEnd]
+      snippet = snippet.replace('\n', '')
       mention = Mention(url, False, snippet)
       self.mentions.append(mention)
 
