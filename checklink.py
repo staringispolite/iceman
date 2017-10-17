@@ -29,11 +29,11 @@ for targetURL in discoveredURLs:
     backlinks = result.getBacklinks()
 
     if args.verbose:
-      print "\nSearching for mentions of \"%s\"..." % brandname
+      print "Searching for mentions of \"%s\"..." % brandname
       print "Found %s" % len(mentions)
       for mention in mentions:
         print "[...]%s[...]" % mention.getSnippet()
-      print "\nSearching for backlinks to \"%s\"..." % canonicalURL
+      print "Searching for backlinks to \"%s\"..." % canonicalURL
       print "Found %s" % len(backlinks)
       for link in backlinks:
         print "-- %s" % link.getHTML()
