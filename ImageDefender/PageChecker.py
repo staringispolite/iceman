@@ -59,24 +59,27 @@ class PageChecker:
           backlinksList.append(thisBacklink)
 
       # Find text matches for mentions of self.brandname
-      for element in tree.iter():
-        if element.tag not in self.blacklistTags:
-          isLinked = (element.tag == "a")
-          innerText = "%s" % element.text
-          mentions = [m.start() for m in re.finditer(self.brandname, innerText)]
-          for startIndex in mentions:
-            # Create a Mention object
-            snippetPadding = 20  # How many chars on each side to show.
-            snippetStart = max(0, startIndex - snippetPadding)
-            snippetEnd = min(len(innerText), startIndex + len(self.brandname) + snippetPadding)
-            snippet = innerText[snippetStart:snippetEnd]
-            snippet = snippet.replace('\n', '')
-            mention = Mention(url, isLinked, snippet)
-            mentionsList.append(mention)
+      if len(self.brandname) > 0:
+        for element in tree.iter():
+          if element.tag not in self.blacklistTags:
+            isLinked = (element.tag == "a")
+            innerText = "%s" % element.text
+            mentions = [m.start() for m in re.finditer(self.brandname, innerText)]
+            for startIndex in mentions:
+              # Create a Mention object
+              snippetPadding = 20  # How many chars on each side to show.
+              snippetStart = max(0, startIndex - snippetPadding)
+              snippetEnd = min(len(innerText), startIndex + len(self.brandname) + snippetPadding)
+              snippet = innerText[snippetStart:snippetEnd]
+              snippet = snippet.replace('\n', '')
+              mention = Mention(url, isLinked, snippet)
+              mentionsList.append(mention)
       successful = True
     except (requests.exceptions.SSLError,
         requests.exceptions.ConnectionError,
-        lxml.etree.XMLSyntaxError) as e:
+        lxml.etree.XMLSyntaxError,
+        UnicodeDecodeError,
+        requests.exceptions.ChunkedEncodingError) as e:
       print e
 
     result = PageCheckerResult(url, backlinksList, mentionsList, successful)
